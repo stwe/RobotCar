@@ -7,12 +7,12 @@ class Ultrasonic
 public:
 	struct Config
 	{
-		int echo;
 		int trigger;
+		int echo;
 
 		Config()
-			: echo(A4)
-			, trigger(A5)
+			: trigger(A0)
+			, echo(A1)
 		{}
 	};
 

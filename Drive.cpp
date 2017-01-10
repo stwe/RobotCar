@@ -3,7 +3,7 @@
 #include "Drive.h"
 
 Drive::Drive(const Config& config)
-	: speed(130)
+	: speed(config.speed)
 	, enA(config.enA)
 	, in1(config.in1)
 	, in2(config.in2)
@@ -89,8 +89,12 @@ void Drive::stop()
 
 void Drive::setSpeed(int speed)
 {
-	if (speed < MINIMUM_SPEED) {
-		speed = MINIMUM_SPEED;
+	if (speed < MIN_SPEED) {
+		speed = MIN_SPEED;
+	}
+
+	if (speed > MAX_SPEED) {
+		speed = MAX_SPEED;
 	}
 
 	this->speed = speed;

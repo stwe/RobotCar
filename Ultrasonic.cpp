@@ -1,8 +1,8 @@
 #include "Ultrasonic.h"
 
 Ultrasonic::Ultrasonic(const Config& config, String name) 
-	: echo(config.echo)
-	, trigger(config.trigger)
+	: trigger(config.trigger)
+	, echo(config.echo)
 	, name(name)
 {}
 
@@ -11,36 +11,35 @@ Ultrasonic::~Ultrasonic()
 
 void Ultrasonic::setup()
 {
-	pinMode(echo, INPUT);
 	pinMode(trigger, OUTPUT);
+	pinMode(echo, INPUT);
 }
 
 int Ultrasonic::getDistance()
 {
 	digitalWrite(trigger, LOW);
-	delay(2);
+	delayMicroseconds(2);
 	digitalWrite(trigger, HIGH);
-	delay(10);
+	delayMicroseconds(10);
 	digitalWrite(trigger, LOW);
 
-	float distance = pulseIn(echo, HIGH);
-	float result = (distance / 2.0) * 0.03432;
+	float duration = pulseIn(echo, HIGH);
 
-	return (int)result;
+	return (int)(duration / 58.2);
 }
 
 int Ultrasonic::getDistanceByTemp(float temp)
 {
 	digitalWrite(trigger, LOW);
-	delay(2);
+	delayMicroseconds(2);
 	digitalWrite(trigger, HIGH);
-	delay(10);
+	delayMicroseconds(10);
 	digitalWrite(trigger, LOW);
 
 	float speed = (331.5 + (0.6 * temp)) / 10000.0;
 
-	float distance = pulseIn(echo, HIGH);
-	float result = (distance / 2.0) * speed;
+	float duration = pulseIn(echo, HIGH);
+	float result = (duration / 2.0) * speed;
 
 	return (int)result;
 }

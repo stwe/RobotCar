@@ -16,7 +16,6 @@ public:
 
 	Drive* drive;
 	Ultrasonic* upperFrontUltrasonic;
-	Ultrasonic* lowerFrontUltrasonic;
 	Adafruit_SSD1306* lcd;
 	Servomotor* servomotor;
 
