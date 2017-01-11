@@ -26,6 +26,7 @@ public:
 	void lookRight();
 	void lookLeft();
 	void lookMiddle();
+	void look(int angle);
 
 private:
 	Servo* servo;

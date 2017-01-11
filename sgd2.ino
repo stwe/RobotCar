@@ -1,8 +1,5 @@
 #include "Robot.h"
-
-int rightDistance = 0;
-int leftDistance = 0; 
-int middleDistance = 0;
+#include "Obstacle.h"
 
 /*
 
@@ -37,66 +34,30 @@ sda: => A4
 */
 
 Robot* myRobot;
-
-void handleDistance()
-{
-	// Auto anhalten
-	myRobot->drive->stop();
-	delay(500);
-
-	// Rechte Entfernung messen
-	myRobot->servomotor->lookRight();
-	delay(1000);
-	rightDistance = myRobot->upperFrontUltrasonic->getDistance();
-
-	// in die Mitte drehen
-	delay(500);
-	myRobot->servomotor->lookMiddle();
-	delay(1000);
-
-	// Linke Entfernung messen
-	myRobot->servomotor->lookLeft();
-	delay(1000);
-	leftDistance = myRobot->upperFrontUltrasonic->getDistance();
-
-	// in die Mitte drehen
-	delay(500);
-	myRobot->servomotor->lookMiddle();
-	delay(1000);
-
-	// Entfernungen auswerten
-	if (rightDistance > leftDistance) {
-		myRobot->drive->right();
-		delay(180);
-	}
-	else if (rightDistance < leftDistance) {
-		myRobot->drive->left();
-		delay(180);
-	}
-	else if ((rightDistance <= 20) || (leftDistance <= 20)) {
-		myRobot->drive->back();
-		delay(180);
-	}
-	else {
-		myRobot->drive->forward();
-	}
-}
+Obstacle* obstacle;
+int middleDistance;
 
 void setup()
 {
 	myRobot = new Robot();
 	myRobot->setup();
+
+	myRobot->servomotor->lookMiddle();
+	myRobot->drive->setSpeed(Drive::MIN_SPEED);
+
+	obstacle = new Obstacle(myRobot);
 }
+
 
 void loop()
 {
-	// Servo in die Mitte und Entfernung holen
+	// look middle
 	myRobot->servomotor->lookMiddle();
 
-	// Enternung messen
+	// and get distance
 	middleDistance = myRobot->upperFrontUltrasonic->getDistance();
 
-	// ... und auf dem Lcd ausgeben
+	// print distance to LCD
 	myRobot->lcd->clearDisplay();
 	myRobot->lcd->setTextSize(2);
 	myRobot->lcd->setTextColor(WHITE);
@@ -105,12 +66,13 @@ void loop()
 	myRobot->lcd->display();
 	delay(1);
 
-	// Korrektur, wenn die Entfernung unter 20cm. Ansonsten Motor-Pins auf forward() schalten
-	/*
-	if (middleDistance <= 20) {
-		handleDistance();
-	} else {		
+	// obstacle avoiding
+	if (middleDistance < Obstacle::MAX_DISTANCE) {
+		// decide which direction to go
+		obstacle->avoiding(middleDistance);
+	}
+	else {
+		// go forward
 		myRobot->drive->forward();
 	}
-	*/
 }

@@ -32,3 +32,8 @@ void Servomotor::lookMiddle()
 {
 	servo->write(middle);
 }
+
+void Servomotor::look(int angle)
+{
+	servo->write(angle);
+}
