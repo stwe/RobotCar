@@ -1,15 +1,6 @@
 #include "Ultrasonic.h"
 
-Ultrasonic::Ultrasonic(const Config& config, String name) 
-	: trigger(config.trigger)
-	, echo(config.echo)
-	, name(name)
-{}
-
-Ultrasonic::~Ultrasonic()
-{}
-
-void Ultrasonic::setup()
+void Ultrasonic::pinSetup()
 {
 	pinMode(trigger, OUTPUT);
 	pinMode(echo, INPUT);
@@ -42,9 +33,4 @@ int Ultrasonic::getDistanceByTemp(float temp)
 	float result = (duration / 2.0) * speed;
 
 	return (int)result;
-}
-
-String Ultrasonic::getName()
-{
-	return name;
 }

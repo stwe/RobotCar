@@ -16,16 +16,20 @@ public:
 		{}
 	};
 
-	Ultrasonic(const Config& config, String name);
-	virtual ~Ultrasonic();
+	Config config;
 
-	void setup();
+	Ultrasonic()
+		: trigger(config.trigger)
+		, echo(config.echo)
+	{};
+
+	virtual ~Ultrasonic() {};
+
+	void pinSetup();
 	int getDistance();
 	int getDistanceByTemp(float temp);
-	String getName();
 
 private:
-	String name;
 	int echo;
 	int trigger;
 };

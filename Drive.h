@@ -6,6 +6,7 @@ public:
 	static const int MIN_SPEED = 90;
 	static const int NORMAL_SPEED = 130;
 	static const int MAX_SPEED = 255;
+	static const int TURNTIME = 900;
 
 	struct Config
 	{
@@ -28,10 +29,21 @@ public:
 		{}
 	};
 
-	Drive(const Config& config);
-	virtual ~Drive();
+	Config config;
 
-	void setup();
+	Drive()
+		: speed(config.speed)
+		, enA(config.enA)
+		, in1(config.in1)
+		, in2(config.in2)
+		, enB(config.enB)
+		, in3(config.in3)
+		, in4(config.in4)
+	{};
+
+	virtual ~Drive() {};
+
+	void pinSetup();
 	void forward();
 	void back();
 	void left();

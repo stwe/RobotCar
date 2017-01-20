@@ -2,38 +2,27 @@
 
 #include "Servomotor.h"
 
-Servomotor::Servomotor(const Config& config)
-	: pin(config.pin)
-	, right(config.right)
-	, left(config.left)
-	, middle(config.middle)
+void Servomotor::pinSetup()
 {
-	servo = new Servo();
-	servo->attach(pin);
-}
-
-Servomotor::~Servomotor()
-{
-	delete servo;
-	servo = 0;
+	servo.attach(pin);
 }
 
 void Servomotor::lookRight()
 {
-	servo->write(right);
+	servo.write(right);
 }
 
 void Servomotor::lookLeft()
 {
-	servo->write(left);
+	servo.write(left);
 }
 
 void Servomotor::lookMiddle()
 {
-	servo->write(middle);
+	servo.write(middle);
 }
 
-void Servomotor::look(int angle)
+void Servomotor::lookByAngle(int angle)
 {
-	servo->write(angle);
+	servo.write(angle);
 }

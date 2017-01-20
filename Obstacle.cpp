@@ -1,18 +1,9 @@
 #include "Obstacle.h"
 
-Obstacle::Obstacle(Robot* robot)
-	: robot(robot)
-	, rightDistance(0)
-	, leftDistance(0)
-{}
-
-Obstacle::~Obstacle()
-{}
-
 void Obstacle::avoiding(int middleDistance)
 {
 	// stop the car
-	robot->drive->stop();
+	robot.drive.stop();
 	delay(500);
 
 	// look around and get right and left distances
@@ -20,41 +11,95 @@ void Obstacle::avoiding(int middleDistance)
 
 	// decide which direction to go
 	if (rightDistance > leftDistance) {
-		robot->drive->right();
-		delay(100);
+		robot.drive.right();
+		delay(Drive::TURNTIME);
 	}
 	else if (rightDistance < leftDistance) {
-		robot->drive->left();
-		delay(100);
+		robot.drive.left();
+		delay(Drive::TURNTIME);
 	}
 	else if ((rightDistance <= MAX_DISTANCE) || (leftDistance <= MAX_DISTANCE)) {
-		robot->drive->back();
-		delay(100);
+		robot.drive.back();
+		delay(Drive::TURNTIME);
 	}
 	else {
-		robot->drive->forward();
+		robot.drive.forward();
 	}
 }
 
 void Obstacle::lookAround()
 {
 	// look right and get distance
-	robot->servomotor->lookRight();
-	delay(500);
-	rightDistance = robot->upperFrontUltrasonic->getDistance();
+	robot.servomotor.lookRight();
+	delay(250);
+	rightDistance = robot.upperFrontUltrasonic.getDistance();
 
 	// look middle again
-	delay(500);
-	robot->servomotor->lookMiddle();
-	delay(500);
+	delay(250);
+	robot.servomotor.lookMiddle();
+	delay(250);
 
 	// look left and get distance
-	robot->servomotor->lookLeft();
-	delay(500);
-	leftDistance = robot->upperFrontUltrasonic->getDistance();
+	robot.servomotor.lookLeft();
+	delay(250);
+	leftDistance = robot.upperFrontUltrasonic.getDistance();
 
 	// return to middle
-	delay(500);
-	robot->servomotor->lookMiddle();
-	delay(500);
+	delay(250);
+	robot.servomotor.lookMiddle();
+	delay(250);
+}
+
+void Obstacle::lookWhileDriving(float temp = 20.0)
+{
+	// middle
+	robot.servomotor.lookMiddle();
+	delay(100);
+	middleDistance = robot.upperFrontUltrasonic.getDistanceByTemp(temp);
+	delay(100);
+
+	// right
+	robot.servomotor.lookByAngle(60);
+	delay(100);
+	rightDistance = robot.upperFrontUltrasonic.getDistanceByTemp(temp);
+	delay(100);
+
+	// middle
+	robot.servomotor.lookMiddle();
+	delay(100);
+
+	// left
+	robot.servomotor.lookByAngle(120);
+	delay(100);
+	leftDistance = robot.upperFrontUltrasonic.getDistanceByTemp(temp);
+	delay(100);
+}
+
+void Obstacle::lookAfterStop(float temp)
+{
+	// middle
+	robot.servomotor.lookMiddle();
+	delay(250);
+	middleDistance = robot.upperFrontUltrasonic.getDistanceByTemp(temp);
+	delay(250);
+
+	// right
+	robot.servomotor.lookRight();
+	delay(250);
+	rightDistance = robot.upperFrontUltrasonic.getDistanceByTemp(temp);
+	delay(250);
+
+	// middle
+	robot.servomotor.lookMiddle();
+	delay(250);
+
+	// left
+	robot.servomotor.lookLeft();
+	delay(250);
+	leftDistance = robot.upperFrontUltrasonic.getDistanceByTemp(temp);
+	delay(250);
+
+	// middle
+	robot.servomotor.lookMiddle();
+	delay(250);
 }

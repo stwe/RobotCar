@@ -2,20 +2,7 @@
 
 #include "Drive.h"
 
-Drive::Drive(const Config& config)
-	: speed(config.speed)
-	, enA(config.enA)
-	, in1(config.in1)
-	, in2(config.in2)
-	, enB(config.enB)
-	, in3(config.in3)
-	, in4(config.in4)
-{}
-
-Drive::~Drive()
-{}
-
-void Drive::setup()
+void Drive::pinSetup()
 {
 	pinMode(enA, OUTPUT);
 	pinMode(in1, OUTPUT);

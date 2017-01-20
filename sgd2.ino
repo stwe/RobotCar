@@ -1,5 +1,8 @@
+#include "Adafruit_SSD1306.h"
 #include "Robot.h"
 #include "Obstacle.h"
+
+#define OLED_RESET 4
 
 /*
 
@@ -33,46 +36,70 @@ sda: => A4
 
 */
 
-Robot* myRobot;
-Obstacle* obstacle;
-int middleDistance;
+Adafruit_SSD1306 lcd(OLED_RESET);
+Robot myRobot;
+Obstacle obstacle(myRobot);
+
+int middleDistanceAfterStop;
+unsigned long previousMillis;
+unsigned long interval;
 
 void setup()
 {
-	myRobot = new Robot();
-	myRobot->setup();
+	lcd.begin(SSD1306_SWITCHCAPVCC, 0x3C);
 
-	myRobot->servomotor->lookMiddle();
-	myRobot->drive->setSpeed(Drive::MIN_SPEED);
-
-	obstacle = new Obstacle(myRobot);
+	myRobot.setup();
+	myRobot.drive.setSpeed(Drive::MIN_SPEED);
 }
-
 
 void loop()
 {
-	// look middle
-	myRobot->servomotor->lookMiddle();
+	// start with look middle
+	myRobot.servomotor.lookMiddle();
 
-	// and get distance
-	middleDistance = myRobot->upperFrontUltrasonic->getDistance();
+	// get right, left and middle distances
+	obstacle.lookWhileDriving();
 
-	// print distance to LCD
-	myRobot->lcd->clearDisplay();
-	myRobot->lcd->setTextSize(2);
-	myRobot->lcd->setTextColor(WHITE);
-	myRobot->lcd->setCursor(0, 0);
-	myRobot->lcd->println(middleDistance);
-	myRobot->lcd->display();
-	delay(1);
+	// ... and print infos to LCD
+	lcd.clearDisplay();
+	lcd.setTextSize(1);
+	lcd.setTextColor(WHITE);
+	lcd.setCursor(0, 0);
+	lcd.print("Right: ");
+	lcd.println(obstacle.rightDistance);
+	lcd.print("Left: ");
+	lcd.println(obstacle.leftDistance);
+	lcd.print("Middle: ");
+	lcd.println(obstacle.middleDistance);
+	lcd.display();
+	delayMicroseconds(1000);
 
 	// obstacle avoiding
-	if (middleDistance < Obstacle::MAX_DISTANCE) {
+	if (obstacle.rightDistance < Obstacle::MAX_DISTANCE || obstacle.leftDistance < Obstacle::MAX_DISTANCE || obstacle.middleDistance < Obstacle::MAX_DISTANCE) {
+		// stop the robot
+		myRobot.drive.stop();
+		delay(250);
+		// get distances
+		obstacle.lookAfterStop();
 		// decide which direction to go
-		obstacle->avoiding(middleDistance);
+		if (obstacle.rightDistance > obstacle.leftDistance) {
+			myRobot.drive.right();
+			delay(Drive::TURNTIME);
+		}
+		else if (obstacle.rightDistance < obstacle.leftDistance) {
+			myRobot.drive.left();
+			delay(Drive::TURNTIME);
+		}
+		else if ((obstacle.rightDistance <= Obstacle::MAX_DISTANCE) || (obstacle.leftDistance <= Obstacle::MAX_DISTANCE)) {
+			myRobot.drive.back();
+			delay(Drive::TURNTIME);
+		}
+		else {
+			myRobot.drive.forward();
+		}
 	}
 	else {
 		// go forward
-		myRobot->drive->forward();
+		myRobot.drive.forward();
 	}
 }
