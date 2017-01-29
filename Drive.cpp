@@ -24,6 +24,8 @@ void Drive::forward()
 	digitalWrite(in3, LOW);
 	digitalWrite(in4, HIGH);
 
+	stopped = false;
+
 	Serial.println("forward");
 }
 
@@ -36,6 +38,8 @@ void Drive::back()
 	digitalWrite(in2, LOW);
 	digitalWrite(in3, HIGH);
 	digitalWrite(in4, LOW);
+
+	stopped = false;
 
 	Serial.println("back");
 }
@@ -50,6 +54,8 @@ void Drive::left()
 	digitalWrite(in3, HIGH);
 	digitalWrite(in4, LOW);
 
+	stopped = false;
+
 	Serial.println("left");
 }
 
@@ -63,6 +69,8 @@ void Drive::right()
 	digitalWrite(in3, LOW);
 	digitalWrite(in4, HIGH);
 
+	stopped = false;
+
 	Serial.println("right");
 }
 
@@ -70,6 +78,8 @@ void Drive::stop()
 {
 	analogWrite(enA, LOW);
 	analogWrite(enB, LOW);
+
+	stopped = true;
 
 	Serial.println("stop");
 }
@@ -90,4 +100,9 @@ void Drive::setSpeed(int speed)
 int Drive::getSpeed()
 {
 	return speed;
+}
+
+bool Drive::getStopped()
+{
+	return stopped;
 }

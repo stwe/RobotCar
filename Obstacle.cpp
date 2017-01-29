@@ -29,6 +29,7 @@ void Obstacle::avoiding(int middleDistance)
 
 void Obstacle::lookAround()
 {
+	/*
 	// look right and get distance
 	robot.servomotor.lookRight();
 	delay(250);
@@ -48,35 +49,48 @@ void Obstacle::lookAround()
 	delay(250);
 	robot.servomotor.lookMiddle();
 	delay(250);
+	*/
 }
 
 void Obstacle::lookWhileDriving(float temp = 20.0)
 {
-	// middle
+	/*
+	// look middle and get distance
 	robot.servomotor.lookMiddle();
 	delay(100);
 	middleDistance = robot.upperFrontUltrasonic.getDistanceByTemp(temp);
+	if (middleDistance < Obstacle::MAX_DISTANCE) {
+		robot.drive.stop();
+	}
 	delay(100);
 
-	// right
+	// look right and get distance
 	robot.servomotor.lookByAngle(60);
 	delay(100);
 	rightDistance = robot.upperFrontUltrasonic.getDistanceByTemp(temp);
+	if (rightDistance < Obstacle::MAX_DISTANCE) {
+		robot.drive.stop();
+	}
 	delay(100);
 
-	// middle
+	// look middle
 	robot.servomotor.lookMiddle();
 	delay(100);
 
-	// left
+	// look left and get distance
 	robot.servomotor.lookByAngle(120);
 	delay(100);
 	leftDistance = robot.upperFrontUltrasonic.getDistanceByTemp(temp);
+	if (leftDistance < Obstacle::MAX_DISTANCE) {
+		robot.drive.stop();
+	}
 	delay(100);
+	*/
 }
 
 void Obstacle::lookAfterStop(float temp)
 {
+	/*
 	// middle
 	robot.servomotor.lookMiddle();
 	delay(250);
@@ -102,4 +116,5 @@ void Obstacle::lookAfterStop(float temp)
 	// middle
 	robot.servomotor.lookMiddle();
 	delay(250);
+	*/
 }

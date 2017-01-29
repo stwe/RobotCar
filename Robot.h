@@ -2,7 +2,6 @@
 
 #include "Drive.h"
 #include "Ultrasonic.h"
-#include "Servomotor.h"
 
 class Robot
 {
@@ -11,8 +10,10 @@ public:
 	virtual ~Robot() {};
 
 	Drive drive;
-	Ultrasonic upperFrontUltrasonic;
-	Servomotor servomotor;
+
+	Ultrasonic leftUltrasonic;
+	Ultrasonic middleUltrasonic;
+	Ultrasonic rightUltrasonic;
 
 	void setup();
 private:

@@ -5,29 +5,18 @@
 class Ultrasonic
 {
 public:
-	struct Config
-	{
-		int trigger;
-		int echo;
-
-		Config()
-			: trigger(A0)
-			, echo(A1)
-		{}
-	};
-
-	Config config;
-
 	Ultrasonic()
-		: trigger(config.trigger)
-		, echo(config.echo)
+		: trigger(A0)
+		, echo(A1)
 	{};
 
 	virtual ~Ultrasonic() {};
 
 	void pinSetup();
+	void setTrigger(int trigger);
+	void setEcho(int echo);
 	int getDistance();
-	int getDistanceByTemp(float temp);
+	int getDistanceByTemp(float temp = 20.0);
 
 private:
 	int echo;

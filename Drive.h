@@ -17,6 +17,7 @@ public:
 		int enB;
 		int in3;
 		int in4;
+		bool stopped;
 
 		Config()
 			: speed(NORMAL_SPEED)
@@ -26,6 +27,7 @@ public:
 			, enB(5)
 			, in3(7)
 			, in4(6)
+			, stopped(false)
 		{}
 	};
 
@@ -39,6 +41,7 @@ public:
 		, enB(config.enB)
 		, in3(config.in3)
 		, in4(config.in4)
+		, stopped(config.stopped)
 	{};
 
 	virtual ~Drive() {};
@@ -51,6 +54,7 @@ public:
 	void stop();
 	void setSpeed(int speed);
 	int getSpeed();
+	bool getStopped();
 
 private:
 	int speed;
@@ -60,4 +64,5 @@ private:
 	int enB;
 	int in3;
 	int in4;
+	bool stopped;
 };

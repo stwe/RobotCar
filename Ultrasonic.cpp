@@ -6,6 +6,16 @@ void Ultrasonic::pinSetup()
 	pinMode(echo, INPUT);
 }
 
+void Ultrasonic::setTrigger(int trigger)
+{
+	this->trigger = trigger;
+}
+
+void Ultrasonic::setEcho(int echo)
+{
+	this->echo = echo;
+}
+
 int Ultrasonic::getDistance()
 {
 	digitalWrite(trigger, LOW);
@@ -19,7 +29,7 @@ int Ultrasonic::getDistance()
 	return (int)(duration / 58.2);
 }
 
-int Ultrasonic::getDistanceByTemp(float temp)
+int Ultrasonic::getDistanceByTemp(float temp = 20.0)
 {
 	digitalWrite(trigger, LOW);
 	delayMicroseconds(2);
